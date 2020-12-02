@@ -1,12 +1,11 @@
 const fs = require('fs');
 
 const mapToEntry = line => {
-  const [policy, character, password] = line.split(' ');
-  const [min, max] = policy.split('-');
+  const [_, min, max, character, password] = line.match(`([\\d]*)-([\\d]*) ([\\w]): ([\\w]*)`);
   return {
     min: Number(min),
     max: Number(max),
-    character: character.replace(':', ''),
+    character,
     password,
     isValid: false
   };
