@@ -2,14 +2,12 @@ const fs = require('fs');
 const unique = array => [...new Set(array)];
 const target = 2020;
 
-const createCombinations = (numbers, number, index) => {
-  return numbers.slice(index + 1).map(other => {
-    return { entries: [number, other], sum: number + other };
-  });
-};
-
 const combinations = numbers => {
-  return numbers.flatMap((number, index) => createCombinations(numbers, number, index));
+  return numbers.flatMap((number, index) =>
+    numbers.slice(index + 1).map(other => {
+      return { entries: [number, other], sum: number + other };
+    })
+  );
 };
 
 const solveWithCombinationsOfTwo = numbers => {
