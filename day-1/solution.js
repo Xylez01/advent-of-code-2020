@@ -1,40 +1,40 @@
 const fs = require('fs');
+const unique = array => [...new Set(array)];
+const target = 2020;
 
-function combinations(numbers, number, index) {
+const createCombinations = (numbers, number, index) => {
   return numbers.slice(index + 1).map(other => {
-    return { result: [number, other], sum: number + other };
+    return { entries: [number, other], sum: number + other };
   });
-}
+};
 
-function solvePartOne(numbers) {
-  return numbers
-    .flatMap((number, index) => combinations(numbers, number, index))
-    .find(combination => combination.sum === 2020)
-    .result.reduce((left, right) => left * right);
-}
+const combinations = numbers => {
+  return numbers.flatMap((number, index) => createCombinations(numbers, number, index));
+};
 
-function solvePartTwo(numbers) {
+const solveWithCombinationsOfTwo = numbers => {
+  return combinations(numbers)
+    .find(combination => combination.sum === target)
+    .entries.reduce((left, right) => left * right);
+};
+
+const solveWithCombinationsOfThree = numbers => {
   return numbers
     .flatMap((number, index) => {
-      const remainingNumbers = numbers.slice(index + 1);
-      return remainingNumbers
-        .flatMap((remainingNumber, indexOfRemainingNumber) =>
-          combinations(remainingNumbers, remainingNumber, indexOfRemainingNumber)
-        )
-        .map(combination => {
-          combination.result.push(number);
-          return { result: combination.result, sum: combination.sum + number };
-        });
+      return combinations(numbers.slice(index + 1)).map(combination => ({
+        entries: [...combination.entries, number],
+        sum: combination.sum + number
+      }));
     })
-    .find(combination => combination.sum === 2020)
-    .result.reduce((left, right) => left * right);
-}
+    .find(combination => combination.sum === target)
+    .entries.reduce((left, right) => left * right);
+};
 
 module.exports = {
   solve() {
     const fileContent = fs.readFileSync('./day-1/input.txt', 'utf8');
-    const numbers = fileContent.split('\r\n').map(numberAsText => Number(numberAsText));
+    const numbers = unique(fileContent.split('\r\n').map(numberAsText => Number(numberAsText)));
 
-    return { partOne: solvePartOne(numbers), partTwo: solvePartTwo(numbers) };
+    return { partOne: solveWithCombinationsOfTwo(numbers), partTwo: solveWithCombinationsOfThree(numbers) };
   }
 };
