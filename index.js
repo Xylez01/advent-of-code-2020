@@ -1,10 +1,14 @@
 const dayOne = require('./day-1/solution');
+const dayTwo = require('./day-2/solution');
 
 const arguments = process.argv.slice(2);
 
 const adventOfCode = {
   dayOne: function () {
     return dayOne.solve();
+  },
+  dayTwo: function () {
+    return dayTwo.solve();
   }
 };
 

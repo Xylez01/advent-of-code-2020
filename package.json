@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dayOne": "node index.js dayOne",
+    "dayTwo": "node index.js dayTwo",
     "format": "yarn prettier --write ."
   },
   "author": "",
