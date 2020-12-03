@@ -6,6 +6,7 @@
   "scripts": {
     "dayOne": "node index.js dayOne",
     "dayTwo": "node index.js dayTwo",
+    "dayThree": "node index.js dayThree",
     "format": "yarn prettier --write ."
   },
   "author": "",
