@@ -14,9 +14,6 @@ bool isValidHeight(String input) {
   return unit == 'cm' ? isInRange(value, 150, 193) : isInRange(value, 59, 76);
 }
 
-final requiredFields = ['byr', 'iyr', 'eyr', 'hgt', 'hcl', 'ecl', 'pid'];
-final validEyeColors = ['amb', 'blu', 'brn', 'gry', 'grn', 'hzl', 'oth'];
-
 final fieldValidators = {
   'byr': (String input) => isInRange(int.parse(input), 1920, 2002),
   'iyr': (String input) => isInRange(int.parse(input), 2010, 2020),
@@ -26,6 +23,9 @@ final fieldValidators = {
   'pid': (String input) => isNumber(input),
   'hgt': (String input) => isLengthExpression(input) && isValidHeight(input)
 };
+
+final requiredFields = fieldValidators.keys;
+final validEyeColors = ['amb', 'blu', 'brn', 'gry', 'grn', 'hzl', 'oth'];
 
 class Passport {
   Map<String, String> fields;
