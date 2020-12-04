@@ -11,18 +11,13 @@ bool isNumber(String input) => new RegExp(r'(\d*)').hasMatch(input);
 bool isValidLength(String input) {
   final unit = input.substring(input.length - 2);
   final value = int.parse(input.substring(0, input.length - 2));
-
-  if (unit == 'cm') {
-    return isInRange(value, 150, 193);
-  } else {
-    return isInRange(value, 59, 76);
-  }
+  return unit == 'cm' ? isInRange(value, 150, 193) : isInRange(value, 59, 76);
 }
 
-var requiredFields = ['byr', 'iyr', 'eyr', 'hgt', 'hcl', 'ecl', 'pid'];
-var validEyeColors = ['amb', 'blu', 'brn', 'gry', 'grn', 'hzl', 'oth'];
+final requiredFields = ['byr', 'iyr', 'eyr', 'hgt', 'hcl', 'ecl', 'pid'];
+final validEyeColors = ['amb', 'blu', 'brn', 'gry', 'grn', 'hzl', 'oth'];
 
-var fieldValidators = {
+final fieldValidators = {
   'byr': (String input) => hasLength(input, 4) && isInRange(int.parse(input), 1920, 2002),
   'iyr': (String input) => hasLength(input, 4) && isInRange(int.parse(input), 2010, 2020),
   'eyr': (String input) => hasLength(input, 4) && isInRange(int.parse(input), 2020, 2030),
@@ -35,9 +30,7 @@ var fieldValidators = {
 class Passport {
   Map<String, String> fields;
 
-  bool get hasRequiredFields {
-    return requiredFields.every((key) => fields.containsKey(key));
-  }
+  bool get hasRequiredFields => requiredFields.every((key) => fields.containsKey(key));
 
   Passport(this.fields) {}
 
