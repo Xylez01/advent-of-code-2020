@@ -5,10 +5,10 @@ Future<List<String>> readInput() async => (await new File('./day-4/input.txt').r
 bool hasLength(String input, int length) => input.length == length;
 bool isInRange(int value, int min, int max) => value >= min && value <= max;
 bool isLengthExpression(String input) => new RegExp(r'(\d*)(cm|in)').hasMatch(input);
-bool isHexColor(String input) => new RegExp(r'#([0-9a-z])').hasMatch(input);
-bool isNumber(String input) => new RegExp(r'(\d*)').hasMatch(input);
+bool isHexColor(String input) => new RegExp(r'#[0-9a-f]{6}').hasMatch(input);
+bool isNumber(String input) => new RegExp(r'^\d{9}$').hasMatch(input);
 
-bool isValidLength(String input) {
+bool isValidHeight(String input) {
   final unit = input.substring(input.length - 2);
   final value = int.parse(input.substring(0, input.length - 2));
   return unit == 'cm' ? isInRange(value, 150, 193) : isInRange(value, 59, 76);
@@ -18,13 +18,13 @@ final requiredFields = ['byr', 'iyr', 'eyr', 'hgt', 'hcl', 'ecl', 'pid'];
 final validEyeColors = ['amb', 'blu', 'brn', 'gry', 'grn', 'hzl', 'oth'];
 
 final fieldValidators = {
-  'byr': (String input) => hasLength(input, 4) && isInRange(int.parse(input), 1920, 2002),
-  'iyr': (String input) => hasLength(input, 4) && isInRange(int.parse(input), 2010, 2020),
-  'eyr': (String input) => hasLength(input, 4) && isInRange(int.parse(input), 2020, 2030),
-  'hcl': (String input) => hasLength(input, 7) && isHexColor(input),
-  'ecl': (String input) => hasLength(input, 3) && validEyeColors.any((color) => color == input),
-  'pid': (String input) => hasLength(input, 9) && isNumber(input),
-  'hgt': (String input) => isLengthExpression(input) && isValidLength(input)
+  'byr': (String input) => isInRange(int.parse(input), 1920, 2002),
+  'iyr': (String input) => isInRange(int.parse(input), 2010, 2020),
+  'eyr': (String input) => isInRange(int.parse(input), 2020, 2030),
+  'hcl': (String input) => isHexColor(input),
+  'ecl': (String input) => validEyeColors.any((color) => color == input),
+  'pid': (String input) => isNumber(input),
+  'hgt': (String input) => isLengthExpression(input) && isValidHeight(input)
 };
 
 class Passport {
