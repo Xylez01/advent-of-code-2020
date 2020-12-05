@@ -4,7 +4,14 @@ import 'dart:math';
 Future<List<String>> readInput() async => (await new File('./day-5/input.txt').readAsString()).split('\r\n');
 
 int ascending(int left, int right) => left - right;
+int sum(int a, int b) => a + b;
 bool includes<T>(List<T> collection, T value) => collection.indexOf(value) >= 0;
+
+Iterable<int> range(int low, int high) sync* {
+  for (int i = low; i <= high; ++i) {
+    yield i;
+  }
+}
 
 class BoardingPass {
   int row;
@@ -36,7 +43,10 @@ void main() async {
   final seatIds = passes.map((pass) => pass.seatId).toList();
   seatIds.sort(ascending);
 
-  final mySeatId = seatIds.firstWhere((seatId) => !includes(seatIds, seatId - 1) && includes(seatIds, seatId - 2)) - 1;
+  final totalSum = range(seatIds.first, seatIds.last).reduce(sum);
+  final sumOfSeatIds = seatIds.reduce(sum);
+
+  final mySeatId = totalSum - sumOfSeatIds;
 
   print('My seat: ${mySeatId}');
   
