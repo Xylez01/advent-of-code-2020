@@ -3,23 +3,8 @@ import 'dart:math';
 
 Future<List<String>> readInput() async => (await new File('./day-5/input.txt').readAsString()).split('\r\n');
 
-List<String> characters(String input) => input.split('');
-Range lowerHalf(Range range) => Range(range.min, ((range.min + range.max) / 2).floor());
-Range upperHalf(Range range) => Range(((range.min + range.max) / 2).ceil(), range.max);
-
-final commands = {
-  'F': (Range range) => lowerHalf(range),
-  'B': (Range range) => upperHalf(range),
-  'L': (Range range) => lowerHalf(range),
-  'R': (Range range) => upperHalf(range)
-};
-
-class Range {
-  int min;
-  int max;
-
-  Range(this.min, this.max);
-}
+int ascending(int left, int right) => left - right;
+bool includes<T>(List<T> collection, T value) => collection.indexOf(value) >= 0;
 
 class BoardingPass {
   int row;
@@ -30,26 +15,29 @@ class BoardingPass {
   BoardingPass(this.row, this.column);
 
   factory BoardingPass.fromInput(String input) {
-    var rowCommands = input.substring(0, input.lastIndexOf('F'));
-    var columnCommands = input.substring(input.lastIndexOf('F') + 1);
+    final rowInBinary = input.substring(0, 7).replaceAll('F', '0').replaceAll('B', '1');
+    final row = int.parse(rowInBinary, radix: 2);
 
-    var rowRange = Range(0, 127);
-    characters(rowCommands).forEach((command) {
-      rowRange = commands[command]?.call(rowRange) ?? rowRange;
-    });
+    final columnInBinary = input.substring(7, 10).replaceAll('L', '0').replaceAll('R', '1');
+    final column = int.parse(columnInBinary, radix: 2);
 
-    var columnRange = Range(0, 7);
-    characters(columnCommands).forEach((command) {
-      columnRange = commands[command]?.call(columnRange) ?? columnRange;
-    });
-
-    return BoardingPass(rowRange.min, columnRange.max);
+    return BoardingPass(row, column);
   }
 }
 
 void main() async {
-  final fileContent =
-      (await readInput()).map((input) => BoardingPass.fromInput(input)).map((pass) => pass.seatId).reduce(max);
+  final fileContent = await readInput();
 
-  print(fileContent);
+  final passes = fileContent.map((input) => BoardingPass.fromInput(input));
+  final highestSeatId = passes.map((pass) => pass.seatId).reduce(max);
+
+  print('Highest seat id: ${highestSeatId}');
+
+  final seatIds = passes.map((pass) => pass.seatId).toList();
+  seatIds.sort(ascending);
+
+  final mySeatId = seatIds.firstWhere((seatId) => !includes(seatIds, seatId - 1) && includes(seatIds, seatId - 2)) - 1;
+
+  print('My seat: ${mySeatId}');
+  
 }
