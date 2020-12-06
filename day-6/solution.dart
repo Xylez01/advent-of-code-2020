@@ -1,18 +1,7 @@
 import 'dart:io';
+import '../dart/extension-methods.dart';
 
 Future<List<String>> readInput() async => (await new File('./day-6/input.txt').readAsString()).split('\r\n\r\n');
-
-extension Characters on String {
-  List<String> characters() => this.split('');
-}
-
-extension Distinct on Iterable<String> {
-  List<String> distinct() => this.toSet().toList();
-}
-
-extension Sum on Iterable<int> {
-  int sum() => this.reduce((int a, int b) => a + b);
-}
 
 final characterRegex = new RegExp('[a-z]');
 
