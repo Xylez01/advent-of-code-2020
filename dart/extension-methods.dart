@@ -1,5 +1,15 @@
-extension Characters on String {
+extension StringExtensions on String {
   List<String> characters() => this.split('');
+
+  String removeAll(Iterable<String> textsToRemove) {
+    var result = this;
+
+    textsToRemove.forEach((text) {
+      result = result.replaceAll(text, '');
+    });
+
+    return result;
+  }
 }
 
 extension Distinct on Iterable<String> {
