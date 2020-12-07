@@ -13,19 +13,20 @@ MapEntry<String, int> parseRequirement(String input) {
 class Rule {
   String color;
   Map<String, int> requirements;
-  bool isAbleToHoldShinyGold;
+  bool canContainShinyBag;
 
-  Rule(this.color, this.requirements, this.isAbleToHoldShinyGold);
+  Rule(this.color, this.requirements, this.canContainShinyBag);
 
   factory Rule.parse(String writtenRule) {
-    var colorAndCanContain = writtenRule.split('bags contain').map((input) => input.trim()).toList();
-    final color = colorAndCanContain.first.trim();
+    var colorAndRequirements = writtenRule.split('bags contain').map((input) => input.trim()).toList();
+    final color = colorAndRequirements.first;
+    final unparsedRequirements = colorAndRequirements.last;
 
-    if (colorAndCanContain.last.trim() == 'no other bags.') {
+    if (unparsedRequirements == 'no other bags.') {
       return Rule(color, new Map(), false);
     }
 
-    final parsedRequirements = colorAndCanContain[1]
+    final parsedRequirements = unparsedRequirements
         .split(',')
         .map((input) => input.removeAll(['bags', 'bag', '.']).trim())
         .map(parseRequirement)
@@ -41,13 +42,13 @@ void updateShinyBagHoldingCapabilities(List<Rule> rules) {
   while (foundAnyBagsThatCouldContainShinyGold) {
     foundAnyBagsThatCouldContainShinyGold = false;
 
-    rules.where((rule) => !rule.isAbleToHoldShinyGold).forEach((rule) {
+    rules.where((rule) => !rule.canContainShinyBag).forEach((rule) {
       final isAlsoAbleToHoldShinyGold = rule.requirements.keys.any((color) {
-        return rules.any((element) => element.color == color && element.isAbleToHoldShinyGold);
+        return rules.any((element) => element.color == color && element.canContainShinyBag);
       });
 
       if (isAlsoAbleToHoldShinyGold) {
-        rule.isAbleToHoldShinyGold = isAlsoAbleToHoldShinyGold;
+        rule.canContainShinyBag = isAlsoAbleToHoldShinyGold;
         foundAnyBagsThatCouldContainShinyGold = true;
       }
     });
@@ -79,7 +80,7 @@ void main() async {
   final rules = fileContent.map((input) => Rule.parse(input)).toList();
   updateShinyBagHoldingCapabilities(rules);
 
-  final rulesThatAllowAShinyGoldBag = rules.where((rule) => rule.isAbleToHoldShinyGold).length;
+  final rulesThatAllowAShinyGoldBag = rules.where((rule) => rule.canContainShinyBag).length;
   print('Solution part 1: ${rulesThatAllowAShinyGoldBag}');
 
   final amountOfBags = getAmountOfBagsWhenUsingAShinyGoldBag(rules);
