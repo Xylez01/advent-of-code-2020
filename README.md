@@ -13,6 +13,7 @@ Currently doing solutions in JavaScript and/or Dart.
 | 5   |            | ✓    |
 | 6   |            | ✓    |
 | 7   |            | ✓    |
+| 8   |            | ✓    |
 
 ## Execution
 
