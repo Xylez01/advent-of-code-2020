@@ -15,26 +15,26 @@ Map<int, int> findJoltageDifferences(List<int> jolts) {
   return differences;
 }
 
-int countArrangements(int joltIndex, List<int> jolts, Map<int, int> paths) {
+int countArrangements(int joltIndex, List<int> jolts, Map<int, int> adapterPaths) {
   if (joltIndex == jolts.length - 1) {
     return 1;
-  } else if (paths.containsKey(joltIndex)) {
-    return paths[joltIndex];
+  } else if (adapterPaths.containsKey(joltIndex)) {
+    return adapterPaths[joltIndex];
   }
 
-  var total = 0;
+  var arrangements = 0;
 
   for (var lookupIndex = joltIndex + 1; lookupIndex < jolts.length; lookupIndex++) {
     var difference = joltIndex >= 0 ? jolts[lookupIndex] - jolts[joltIndex] : jolts[lookupIndex];
     if (difference <= 3) {
-      total += countArrangements(lookupIndex, jolts, paths);
+      arrangements += countArrangements(lookupIndex, jolts, adapterPaths);
     } else {
       break;
     }
   }
 
-  paths.putIfAbsent(joltIndex, () => total);
-  return total;
+  adapterPaths[joltIndex] = arrangements;
+  return arrangements;
 }
 
 void main() async {
