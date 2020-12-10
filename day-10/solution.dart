@@ -15,7 +15,7 @@ Map<int, int> findJoltageDifferences(List<int> jolts) {
   return differences;
 }
 
-int countArrangements(int joltIndex, List<int> jolts, Map<int, int> adapterPaths) {
+int countArrangements(List<int> jolts, Map<int, int> adapterPaths, {int joltIndex = -1}) {
   if (joltIndex == jolts.length - 1) {
     return 1;
   } else if (adapterPaths.containsKey(joltIndex)) {
@@ -27,7 +27,7 @@ int countArrangements(int joltIndex, List<int> jolts, Map<int, int> adapterPaths
   for (var lookupIndex = joltIndex + 1; lookupIndex < jolts.length; lookupIndex++) {
     var difference = joltIndex >= 0 ? jolts[lookupIndex] - jolts[joltIndex] : jolts[lookupIndex];
     if (difference <= 3) {
-      arrangements += countArrangements(lookupIndex, jolts, adapterPaths);
+      arrangements += countArrangements(jolts, adapterPaths, joltIndex: lookupIndex);
     } else {
       break;
     }
@@ -45,6 +45,6 @@ void main() async {
   final differences = findJoltageDifferences([0, ...jolts, jolts.last + 3]);
   print('Solution part 1: ${(differences[1] ?? 0) * (differences[3] ?? 0)}');
 
-  final arrangements = countArrangements(-1, jolts, Map<int, int>());
+  final arrangements = countArrangements(jolts, Map<int, int>());
   print('Solution part 1: ${arrangements}');
 }
