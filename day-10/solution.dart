@@ -46,5 +46,5 @@ void main() async {
   print('Solution part 1: ${(differences[1] ?? 0) * (differences[3] ?? 0)}');
 
   final arrangements = countArrangements(jolts, Map<int, int>());
-  print('Solution part 1: ${arrangements}');
+  print('Solution part 2: ${arrangements}');
 }
