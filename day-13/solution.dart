@@ -23,20 +23,17 @@ int findEarliestBus(int arrivalTime, List<int> busTimes) {
 }
 
 int findEarliestTimeStampOfConsecutiveDeparture(List<String> busSchedule) {
-  var offset = 0;
   var timeStamp = 0;
   var multiplier = 1;
 
-  for (var character in busSchedule) {
-    if (character == 'x') {
-      offset++;
+  for (var offset = 0; offset < busSchedule.length; offset++) {
+    if (busSchedule[offset] == 'x') {
       continue;
     }
 
-    final id = int.parse(character);
+    final id = int.parse(busSchedule[offset]);
     timeStamp = findNextTimeStamp(timeStamp, multiplier, id, offset);
     multiplier *= id;
-    offset++;
   }
 
   return timeStamp;
