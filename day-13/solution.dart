@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:math';
 
 Future<List<String>> readInput() async => (await new File('./day-13/input.txt').readAsString()).split('\r\n');
 
@@ -23,6 +22,39 @@ int findEarliestBus(int arrivalTime, List<int> busTimes) {
   return difference * busses.first.interval;
 }
 
+int findEarliestTimeStampOfConsecutiveDeparture(List<String> busSchedule) {
+  var offset = 0;
+  var timeStamp = 0;
+  var multiplier = 1;
+
+  for (var character in busSchedule) {
+    if (character == 'x') {
+      offset++;
+      continue;
+    }
+
+    final id = int.parse(character);
+    timeStamp = findNextTimeStamp(timeStamp, multiplier, id, offset);
+    multiplier *= id;
+    offset++;
+  }
+
+  return timeStamp;
+}
+
+bool fitsSchedule(int timeStamp, int offset, int id) => (timeStamp + offset) % id == 0;
+
+int findNextTimeStamp(int result, int multiplier, int id, int offset) {
+  bool foundNext = false;
+  
+  while(!foundNext) {
+    final timeStamp = (result += multiplier);
+    foundNext = fitsSchedule(timeStamp, offset, id);
+  }
+
+  return result;
+}
+
 void main() async {
   final fileContent = await readInput();
   final arrivalTime = int.parse(fileContent[0].trim());
@@ -32,4 +64,7 @@ void main() async {
 
   final partOne = findEarliestBus(arrivalTime, busTimes);
   print('Solution part 1: ${partOne}');
+
+  final partTwo = findEarliestTimeStampOfConsecutiveDeparture(busSchedule);
+  print('Solution part 1: ${partTwo}');
 }
