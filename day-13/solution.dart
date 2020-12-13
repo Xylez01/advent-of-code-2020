@@ -45,11 +45,11 @@ int findEarliestTimeStampOfConsecutiveDeparture(List<String> busSchedule) {
 bool fitsSchedule(int timeStamp, int offset, int id) => (timeStamp + offset) % id == 0;
 
 int findNextTimeStamp(int result, int multiplier, int id, int offset) {
-  bool foundNext = false;
+  bool foundNextTimeStamp = false;
   
-  while(!foundNext) {
+  while(!foundNextTimeStamp) {
     final timeStamp = (result += multiplier);
-    foundNext = fitsSchedule(timeStamp, offset, id);
+    foundNextTimeStamp = fitsSchedule(timeStamp, offset, id);
   }
 
   return result;
